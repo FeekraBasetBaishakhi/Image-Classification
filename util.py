@@ -11,10 +11,14 @@ MODEL = pickle.load(open("model.p", "rb"))
 
 
 def zero_or_not(spot_bgr):
+    """
+
+    @rtype: object
+    """
     flat_data = []
 
-    image_resize = resize(spot_bgr, (15, 15, 3))
-    flat_data.append(image_resize.flatten())
+    image_resized = resize(spot_bgr, (15, 15, 3))
+    flat_data.append(image_resized.flatten())
     flat_data = np.array(flat_data)
 
     y_output = MODEL.predict(flat_data)
@@ -28,7 +32,7 @@ def zero_or_not(spot_bgr):
 def get_parking_spot_boxes(connected_compnts):
     (totalLabels, label_ids, values, centric) = connected_compnts
 
-    slot = []
+    slots = []
     coef = 1
 
     for i in range(1, totalLabels):
@@ -38,6 +42,6 @@ def get_parking_spot_boxes(connected_compnts):
         w = int(values[i, cv2.CC_STAT_WIDTH] * coef)
         h = int(values[i, cv2.CC_STAT_HEIGHT] * coef)
 
-        slot.append([a3, b3, w, h])
+        slots.append([a3, b3, w, h])
 
-    return slot
+    return slots
